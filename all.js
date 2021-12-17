@@ -6,14 +6,14 @@ const cropInputs = document.querySelector("#crop");
 const sortSelects = document.querySelector(".sort-select");
 const moblieSelects = document.querySelector("#js-moblie-select");
 const sortAdvanceds = document.querySelector(".js-sort-advanced");
-//console.log(sortAdvanceds);
+const cropNames = document.querySelector("#js-crop-name");
+//console.log(cropNames);
 let data = [];
 let matchData = [];
 
 function getData(){
   axios.get(url)
        .then(function (res) {
-        //console.log(response.data);
         //data = res.data;
         data = res.data.filter((item)=>item.作物名稱);
         //matchData = data;  //對 matchData 進行排序會影響到 data 的排序
@@ -27,7 +27,6 @@ getData();
 function renderData(showData){
   let str = "";
   showData.forEach((item)=>{
-    //console.log(item.作物名稱);
     //<td colspan="6" class="text-center p-3">請輸入並搜尋想比價的作物名稱^＿^</td>
     str +=`<tr>
              <td>${item.作物名稱}</td>
@@ -45,27 +44,27 @@ function renderData(showData){
 //按鈕篩選功能
 btns.addEventListener("click", (e)=>{
   //console.log(e.target.dataset.type);
-  let filterData = [];
+  //let filterData = [];
   if(e.target.nodeName === "BUTTON"){
     const selectBtns = document.querySelectorAll(".button-group button");
     selectBtns.forEach((item)=> item.classList.remove("active"));
     if(e.target.dataset.type === "N03"){
       e.target.classList.add("active");
-      filterData = data;
+      matchData = data;
     }
     if(e.target.dataset.type === "N04"){
       e.target.classList.add("active");
-      filterData = data.filter((item)=> item.種類代碼 === "N04");
+      matchData = data.filter((item)=> item.種類代碼 === "N04");
     }
     else if(e.target.dataset.type === "N05"){
       e.target.classList.add("active");
-      filterData = data.filter((item)=> item.種類代碼 === "N05");
+      matchData = data.filter((item)=> item.種類代碼 === "N05");
     }
     else if(e.target.dataset.type === "N06"){
       e.target.classList.add("active");
-      filterData = data.filter((item)=> item.種類代碼 === "N06");
+      matchData = data.filter((item)=> item.種類代碼 === "N06");
     }
-    renderData(filterData);
+    renderData(matchData);
   }
 })
 
@@ -74,59 +73,68 @@ searchName.addEventListener("click", searchData);
 function searchData(e){
   //console.log(e.target.nodeName);
   let inputValues = cropInputs.value.trim();
-  let searchData = [];
+  //let searchData = [];
   if(e.target.nodeName === "BUTTON"){
     if(!inputValues){
       alert("阿呆!請輸入內容再送出!!");
       return;
     }
     //searchData = data.filter((item)=> item.作物名稱 === cropInputs.value);
-    searchData = matchData.filter((item)=>{
+    matchData = data.filter((item)=>{
       if(item.作物名稱 == "null"){  //判斷作物為null時就終止
         return;
       }else{
-      return item.作物名稱.match(inputValues);
+        return item.作物名稱.match(inputValues);
       }
     })
+    cropNames.textContent = `查看「${inputValues}」的比價結果`;
     
-    if(searchData.length === 0){
+    if(matchData.length === 0){
       showLists.innerHTML = `<tr><td colspan="6" class="text-center p-3">查詢不到交易資訊QQ</td></tr>`;
     }else{
-    cropInputs.value = "";  //篩選成功將輸入欄位變空
-    renderData(searchData);
+      cropInputs.value = "";  //篩選成功將輸入欄位變空
+      renderData(matchData);
     }
   }
 }
+
+//優化Enter按鈕
+cropInputs.addEventListener("keyup", (e)=>{
+  if(e.key == "Enter"){
+    searchData(e);
+  }
+})
 
 //篩選功能
 sortSelects.addEventListener("change", switchSelect);
 moblieSelects.addEventListener("change", switchSelect);
 function switchSelect(e){
   switch(e.target.value){
-    case "依上價排序":
+    case "上價":
       selectChange("上價");
       break;
-    case "依中價排序":
+    case "中價":
       selectChange("中價");
       break;
-    case "依下價排序":
+    case "下價":
       selectChange("下價");
       break;
-    case "依平均價排序":
+    case "平均價":
       selectChange("平均價");
       break;
-    case "依交易量排序":
+    case "交易量":
       selectChange("交易量");
       break;
     default:
       break;
   }
 }
- function selectChange(value){
-   matchData.sort((a, b)=>{
+
+function selectChange(value){
+  data.sort((a, b)=>{
      return b[value] - a[value]; //從大排到小
-   })
-   renderData(matchData);
+  })
+  renderData(data);
 }
 
 //點擊up, down篩選功能
@@ -140,7 +148,7 @@ sortAdvanceds.addEventListener("click", (e)=>{
       data.sort((a, b)=>{
         return b[sortPrice] - a[sortPrice];
       })
-    }else{  //判斷如果點選down, 從大排到小
+    }else{  //判斷如果點選down, 從小排到大
       data.sort((a, b)=>{
         return a[sortPrice] - b[sortPrice];
       })

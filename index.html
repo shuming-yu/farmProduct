@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>農產品比價網</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
@@ -21,7 +21,6 @@
           </div>
       
           <div class="seach-group d-flex flex-column flex-md-row ">
-      
             
             <div class="crop-input d-flex mb-2">
               <label class="rounded-start text-white" for="crop">作物名稱</label>
@@ -34,12 +33,12 @@
             <p id="js-crop-name" class="show-result fw-bold"></p>
       
             <select id="js-select" class="sort-select border-secondary d-none d-md-block rounded p-2 pe-4">
-              <option>排序篩選</option>
-              <option>依上價排序</option>
-              <option>依中價排序</option>
-              <option>依下價排序</option>
-              <option>依平均價排序</option>
-              <option>依交易量排序</option>
+              <option value="default">排序篩選</option>
+              <option value="上價">依上價排序</option>
+              <option value="中價">依中價排序</option>
+              <option value="下價">依下價排序</option>
+              <option value="平均價">依平均價排序</option>
+              <option value="交易量">依交易量排序</option>
             </select>
           </div>
           <table class="market table me-4">
@@ -109,12 +108,12 @@
         </div>
       
         <select id="js-moblie-select" class="mobile-select border-2 border-secondary d-block d-md-none rounded-pill pt-1 pb-1 position-fixed end-0 bottom-0  ps-2 pe-3">
-          <option>排序</option>
-          <option>上價</option>
-          <option>中價</option>
-          <option>下價</option>
-          <option>平均價</option>
-          <option>交易量</option>
+          <option value="default">排序</option>
+          <option value="上價">上價</option>
+          <option value="中價">中價</option>
+          <option value="下價">下價</option>
+          <option value="平均價">平均價</option>
+          <option value="交易量">交易量</option>
         </select>
       </div>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
